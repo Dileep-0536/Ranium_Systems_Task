@@ -20,11 +20,13 @@
                 @csrf
                 <div class="form-group">
                     <label for="start_date">Start Date</label>
-                    <input type="text" class="form-control datepicker" id="start_date" aria-describedby="emailHelp" placeholder="Start Date" name="start_date" required autocomplete="off">
+                    <input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date" name="start_date" autocomplete="off" required>
+                    <span class="text-danger" id="start_dateError"></span>
                 </div>
                 <div class="form-group">
                     <label for="end_date">End Date</label>
-                    <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date" name="end_date" required autocomplete="off">
+                    <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date" name="end_date" autocomplete="off" required>
+                    <span class="text-danger" id="end_dateError"></span>
                 </div>
                 <button type="submit" class="btn btn-primary" id="btn_submit">Submit</button>
                 <button type='button' onclick='destroy()' class='btn btn-danger'>Destroy</button>
@@ -65,12 +67,10 @@
             'X-CSRF-Token': $('meta[name="_token"]').attr('content')
         }
     });
-
-        var minDate ;
-        var maxDate;
-        var mDate
-        // var j = jQuery.noConflict();
-        $( "#start_date" ).datepicker({
+    var minDate;
+    var maxDate;
+    var mDate;
+    $( "#start_date" ).datepicker({
             onSelect: function() {
             minDate = $( "#start_date" ).datepicker("getDate");
             var mDate = new Date(minDate.setDate(minDate.getDate()));
@@ -130,6 +130,9 @@
                     myChart.data = data;
                     myChart.update(); 
                 }
+            }, error:function (response) {
+                $('#start_dateError').text(response.responseJSON.errors.start_date);
+                $('#end_dateError').text(response.responseJSON.errors.end_date);
             }
         });
     });  
